@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"log"
 	"os"
+	"map"
 )
 func check(e error) {
 	if e != nil {
@@ -29,6 +30,14 @@ func isNumber(s byte) bool {
 	}
 	return isNum
 }
+
+
+m := make(map[string]int)
+
+
+
+
+
 
 func find_first_digit(line_str string) (string, int) {
 	var first_digit_str string = "0";
