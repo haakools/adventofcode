@@ -58,10 +58,16 @@ func findStringOccurences(line_str string, string_map map[string]int) (map[int]s
 	substrMap := make(map[int]string)
 	substrKeys := make([]int, 0)
 	for key, val := range(string_map) {
-		if strings.Contains(line_str, key) {
+		str_count := strings.Count(line_str, key)
+		if str_count > 0 {
 			//fmt.Printf("Found the number %v in %v\n", line_str, key)
 			idx := strings.Index(line_str, key)
 			substrMap[idx] = strconv.Itoa(val)
+			if str_count > 1 {
+				lastidx := strings.LastIndex(line_str, key)
+				substrMap[lastidx] = strconv.Itoa(val)
+				substrKeys = append(substrKeys, lastidx)
+			}
 			substrKeys = append(substrKeys, idx)
 		}
 	}
@@ -100,6 +106,7 @@ func getOutputNumbers(line string, m map[string]int) (string, string) {
 
 func main() {
 	string_data := read_file_to_str("input.txt")
+	//string_data := read_file_to_str("testcase.txt")
 	lines := strings.Split(string_data, "\n")
 
 	// creating a map 
