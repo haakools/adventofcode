@@ -22,8 +22,8 @@ func parseLine(line string) []string {
 	colon_split := strings.Split(line, ":")
 	//fmt.Printf("type %T\n", colon_split[1])
 
-	each_try := strings.Split(colon_split[1], ";")
-	return each_try
+	samples := strings.Split(colon_split[1], ";")
+	return samples
 }
 
 func isNumber(s string) bool {
@@ -33,39 +33,33 @@ func isNumber(s string) bool {
 	}
 	return isNum
 }
-// Do it with runes and maps instead of this ugly string stuff
 
-// Find the digit
+func splitSample(cubeInfo string) (int, string) {
+	cubeInfoParsed := strings.Split(cubeInfo, " ")
+	number, _ := strconv.Atoi(cubeInfoParsed[1]);
+	color_last_idx := strings.LastIndex(cubeInfo, " ")
+	color := cubeInfo[color_last_idx+1:]
+	return number, color
+}
+
 
 func validateGame(samples []string, bagContents map[string]int) bool {
 	for _, sample := range(samples) {
-		for _, cubeInfo := range(strings.Split(sample, ",")) {
+		colorCountStr := strings.Split(sample, ",")		
 
-			cubeInfoParsed := strings.Split(cubeInfo, " ")
-			fmt.Println(cubeInfoParsed)
-			for _, item := range(cubeInfoParsed) {
-				fmt.Println(bagContents[item])
-			}
-			number, _ := strconv.Atoi(cubeInfoParsed[1]);
-			color := cubeInfoParsed[2]
-			if color == "" {
-				break
-			}
-			//fmt.Printf("The parsed color is %v\n", color)
-
-			countDifference := bagContents[color] - number
-			fmt.Printf("Color %v has count %v. Difference is %d\n", color, number, countDifference)
+		for _, cubeInfo := range(colorCountStr) {
+			number, color := splitSample(cubeInfo)
+			countDifference := bagContents[strings.TrimSpace(color)] - number
 			if countDifference < 0 {
 				return false
 			}
 		}
-
 	}
 	return true
 }
 
 func main() {
-	string_data := read_file_to_str("example.txt")
+	string_data := read_file_to_str("input.txt")
 	lines := strings.Split(string_data, "\n")
 
 	bagContents := make(map[string]int)
@@ -73,20 +67,19 @@ func main() {
 	bagContents["green"] = 13
 	bagContents["blue"]  = 14
 
-	validCounter := 0
+	IDsum := 0
 
 	for i:= 0; i < len(lines); i++ {
 		fmt.Printf("%v\n", lines[i])
 		samples := parseLine(lines[i])
 
 		if validateGame(samples, bagContents) {
-			fmt.Printf("%d is valid\n", i)
-			validCounter++
+			fmt.Println("GAME IS VALID.")
+			IDsum += i+1
 		}
-		if i==0 {break}
 	}
 
 
-	fmt.Printf("There are %d valid games\n", validCounter)
+	fmt.Printf("The sum of valid IDs are %d \n", IDsum)
 	
 }
