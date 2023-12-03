@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"log"
 	"os"
-	"map"
 )
 func check(e error) {
 	if e != nil {
@@ -80,6 +79,4 @@ func main() {
 		result = result + number;
 	}
 	fmt.Printf("The sum if %d\n", result);
-
-
 }
